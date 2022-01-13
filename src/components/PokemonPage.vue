@@ -23,17 +23,50 @@
       </div>
       <div>
         <div>
-          <span>Введите имя покемона En</span>
+          <div>Введите имя покемона En или выберите из списка слева</div>
           <input v-model="name">
         </div>
         <div>
-          <textarea v-model="result" />
           <button
             class="pokemon-page__button"
             @click="getPokemon"
           >
-            hueta
+            getPokemonInfo
           </button>
+        </div>
+        <div>
+          <div class="pokemon-page__pokemon-photo">
+            <img
+              :src="pokemonInfo.sprites.front_default"
+              alt=""
+            >
+            <img
+              :src="pokemonInfo.sprites.back_default"
+              alt=""
+            >
+          </div>
+          <div class="pokemon-page__pokemon-name">
+            Имя:
+            <div class="pokemon-page__data">{{ pokemonInfo.name }}</div>
+          </div>
+          <div class="pokemon-page__pokemon-height">
+            Рост:
+            <div class="pokemon-page__data">{{ pokemonInfo.height }}</div>
+          </div>
+          <div class="pokemon-page__pokemon-skills">
+            Навыки:
+            <div
+              class="pokemon-page__data"
+              v-for="item in pokemonInfo.abilities"
+              :key="item.index"
+            >
+              {{ item.ability.name }}<br />
+            </div>
+          </div>
+
+          <div>
+            <span />
+          </div>
         </div>
       </div>
     </div>
@@ -52,11 +85,11 @@ export default {
       result: null,
       name: 'ditto',
       pokemonList: [
-        {"name":"bulbasaur","url":"https://pokeapi.co/api/v2/pokemon/1/"},
-        {"name":"ivysaur","url":"https://pokeapi.co/api/v2/pokemon/2/"},
-        {"name":"charizard","url":"https://pokeapi.co/api/v2/pokemon/6/"},
-        {"name":"squirtle","url":"https://pokeapi.co/api/v2/pokemon/7/"},
-      ]
+      ],
+      pokemonInfo: {
+        sprites: {
+        }
+      }
     }
   },
   methods: {
@@ -64,9 +97,12 @@ export default {
       this.name = item
     },
        async getPokemon() {
-         let result = await fetch(`https://pokeapi.co/api/v2/pokemon/${this.name}`)
-         console.log(result)
-         this.result = await result.text()
+      let pokemon = ''
+         await fetch(`https://pokeapi.co/api/v2/pokemon/${this.name}`)
+             .then(response => response.json())
+             .then(pokemons => pokemon = pokemons)
+         console.log(pokemon)
+         this.pokemonInfo = pokemon
        },
        async getPokemonList() {
          let arrayPokemonObjects = []
@@ -112,6 +148,44 @@ export default {
       border-radius: 7px;
       padding-left: 10px;
     }
+  }
+  &__pokemon-photo {
+    display: flex;
+    justify-content: start;
+    padding: 20px;
+    background-color: #999999;
+    & img {
+      border: 1px solid black;
+    }
+  }
+  &__pokemon-name {
+    display: flex;
+    justify-content: start;
+    padding: 10px;
+    border: 1px solid white;
+    background-color: #999999;
+    color: #FF845D;
+  }
+  &__pokemon-height {
+    display: flex;
+    justify-content: start;
+    padding: 10px;
+    border: 1px solid white;
+    background-color: #999;
+    color: #FF845D;
+  }
+  &__pokemon-skills {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: start;
+    padding: 10px;
+    border: 1px solid white;
+    background-color: #999;
+    color: #FF845D;
+  }
+  &__data {
+    color: aqua;
   }
 }
 </style>
