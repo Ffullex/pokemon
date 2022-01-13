@@ -1,26 +1,37 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <pokemon-page />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
+import PokemonPage from "./components/PokemonPage";
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    PokemonPage
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  *::-webkit-scrollbar {
+    border-radius: 6px;
+    width: 6px;
+    height: 6px;
+    opacity: 0.5;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    outline: 1px solid #fff;
+    border-radius: 6px;
+    background-color: #999;
+  }
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 60px;
+  }
 </style>
