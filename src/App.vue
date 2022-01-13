@@ -14,6 +14,9 @@ export default {
 </script>
 
 <style>
+body {
+  background-color: #999999;
+}
   *::-webkit-scrollbar {
     border-radius: 6px;
     width: 6px;

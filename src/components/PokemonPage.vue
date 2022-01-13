@@ -25,8 +25,6 @@
         <div>
           <div>Введите имя покемона En или выберите из списка слева</div>
           <input v-model="name">
-        </div>
-        <div>
           <button
             class="pokemon-page__button"
             @click="getPokemon"
@@ -134,6 +132,7 @@ export default {
     height: 100%;
     background-color: #999;
   }
+
   &__pokemon-list {
     overflow: scroll;
     height: 800px;
@@ -155,7 +154,7 @@ export default {
     padding: 20px;
     background-color: #999999;
     & img {
-      border: 1px solid black;
+      border: 1px solid white;
     }
   }
   &__pokemon-name {
