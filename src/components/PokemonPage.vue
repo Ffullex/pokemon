@@ -15,7 +15,7 @@
           <button
             v-for="item in pokemonList"
             :key="item.name"
-            @click="choosePokemon(item.name)"
+            @click="getPokemonInfo(item.name)"
           >
             {{ item.name }}
           </button>
@@ -24,38 +24,38 @@
       <div>
         <div>
           <div>Введите имя покемона En или выберите из списка слева</div>
-          <input v-model="name">
+          <input v-model="pokemonName">
           <button
             class="pokemon-page__button"
-            @click="getPokemon"
+            @click="getPokemonInfo(pokemonName)"
           >
             getPokemonInfo
           </button>
         </div>
         <div>
-          <div class="pokemon-page__pokemon-photo">
+          <div class="pokemon-page__pokemon-photo" v-if="pokemonObject">
             <img
-              :src="pokemonInfo.sprites.front_default"
+              :src="pokemonObject.sprites.front_default"
               alt=""
             >
             <img
-              :src="pokemonInfo.sprites.back_default"
+              :src="pokemonObject.sprites.back_default"
               alt=""
             >
           </div>
-          <div class="pokemon-page__pokemon-name">
+          <div class="pokemon-page__pokemon-name" v-if="pokemonObject">
             Имя:
-            <div class="pokemon-page__data">{{ pokemonInfo.name }}</div>
+            <div class="pokemon-page__data">{{ pokemonObject.name }}</div>
           </div>
-          <div class="pokemon-page__pokemon-height">
+          <div class="pokemon-page__pokemon-height" v-if="pokemonObject">
             Рост:
-            <div class="pokemon-page__data">{{ pokemonInfo.height }}</div>
+            <div class="pokemon-page__data">{{ pokemonObject.height }}</div>
           </div>
-          <div class="pokemon-page__pokemon-skills">
+          <div class="pokemon-page__pokemon-skills" v-if="pokemonObject">
             Навыки:
             <div
               class="pokemon-page__data"
-              v-for="item in pokemonInfo.abilities"
+              v-for="item in pokemonObject.abilities"
               :key="item.index"
             >
               {{ item.ability.name }}<br />
@@ -75,40 +75,29 @@
 
 export default {
   name: 'PokemonPage',
-  props: {
-    msg: String
-  },
   data () {
     return {
       result: null,
-      name: 'ditto',
-      pokemonList: [
-      ],
-      pokemonInfo: {
-        sprites: {
-        }
-      }
+      pokemonName: 'ditto',
     }
   },
-  methods: {
-    choosePokemon(item) {
-      this.name = item
+  computed: {
+    pokemonObject() {
+      return this.$store.getters['pokemonPage/pokemonInfo']
     },
-       async getPokemon() {
-      let pokemon = ''
-         await fetch(`https://pokeapi.co/api/v2/pokemon/${this.name}`)
-             .then(response => response.json())
-             .then(pokemons => pokemon = pokemons)
-         console.log(pokemon)
-         this.pokemonInfo = pokemon
-       },
-       async getPokemonList() {
-         let arrayPokemonObjects = []
-         await fetch('https://pokeapi.co/api/v2/pokemon?limit=1118')
-         .then(response => response.json())
-         .then(pokemons => arrayPokemonObjects = pokemons.results)
-         this.pokemonList = arrayPokemonObjects
-       }
+    pokemonList() {
+      return this.$store.getters['pokemonPage/pokemonList']
+    }
+  },
+
+  methods: {
+    getPokemonInfo: function (name) {
+      this.pokemonName = name
+      this.$store.dispatch('pokemonPage/getPokemonInfo', this.pokemonName)
+    },
+    getPokemonList() {
+      this.$store.dispatch('pokemonPage/getPokemonList')
+    }
   }
 }
 </script>
@@ -164,6 +153,7 @@ export default {
     border: 1px solid white;
     background-color: #999999;
     color: #FF845D;
+    margin: 10px;
   }
   &__pokemon-height {
     display: flex;
@@ -172,6 +162,7 @@ export default {
     border: 1px solid white;
     background-color: #999;
     color: #FF845D;
+    margin: 10px;
   }
   &__pokemon-skills {
     display: flex;
@@ -182,6 +173,7 @@ export default {
     border: 1px solid white;
     background-color: #999;
     color: #FF845D;
+    margin: 10px;
   }
   &__data {
     color: aqua;
